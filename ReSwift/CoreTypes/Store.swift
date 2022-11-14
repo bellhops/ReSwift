@@ -82,7 +82,7 @@ open class Store<State>: StoreType {
             .reversed()
             .reduce(
                 { [unowned self] action in
-                    self._defaultDispatch(action: action) },
+                    return self._defaultDispatch(action: action) },
                 { dispatchFunction, middleware in
                     // If the store get's deinitialized before the middleware is complete; drop
                     // the action without dispatching.
@@ -155,7 +155,7 @@ open class Store<State>: StoreType {
     }
 
     // swiftlint:disable:next identifier_name
-    open func _defaultDispatch(action: Action) {
+    open func _defaultDispatch(action: Action) -> Any {
         guard !isDispatching.value else {
             raiseFatalError(
                 "ReSwift:ConcurrentMutationError- Action has been dispatched while" +
@@ -170,10 +170,13 @@ open class Store<State>: StoreType {
         isDispatching.value { $0 = false }
 
         state = newState
+
+        return action
     }
 
-    open func dispatch(_ action: Action) {
-        dispatchFunction(action)
+    @discardableResult
+    open func dispatch(_ action: Action) -> Any {
+        return dispatchFunction(action)
     }
 
     @available(*, deprecated, message: "Deprecated in favor of https://github.com/ReSwift/ReSwift-Thunk")
