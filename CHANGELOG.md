@@ -6,6 +6,13 @@
 
 **Other:**
 
+# 6.1.0-bellhop.1
+
+*Released: 2022-11-14*
+
+**Breaking API Changes:**
+- Return Any from `DispatchingStoreType.dispatch(_)` method (#1) - @karimhm
+
 # 6.1.0
 
 *Released: 2021-05-09*
